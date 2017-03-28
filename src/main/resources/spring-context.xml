@@ -59,7 +59,8 @@
         <property name="dataSource" ref="dataSource"/>
         <property name="typeAliasesPackage" value="cn.qtech.mtf"/>
         <property name="typeAliasesSuperType" value="cn.qtech.mtf.common.persistence.BaseEntity"/>
-        <property name="mapperLocations" value="classpath:/mappings/modules/**/*.xml"/>
+        <!--todo 生成mappig后取消注释-->
+        <!--<property name="mapperLocations" value="classpath:/mappings/modules/**/*.xml"/>-->
         <property name="configLocation" value="classpath:/mybatis-config.xml"></property>
     </bean>
     <!-- 扫描basePackage下所有以@MyBatisDao注解的接口 -->
@@ -74,4 +75,12 @@
     </bean>
     <!-- 配置 Annotation 驱动，扫描@Transactional注解的类定义事务  -->
     <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+
+    <!--文件上传表单的视图解析器-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="104857600"/>
+        <property name="maxInMemorySize" value="4096"/>
+    </bean>
+
+
 </beans>

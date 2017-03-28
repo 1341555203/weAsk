@@ -5,7 +5,7 @@
   <artifactId>weAsk</artifactId>
   <packaging>war</packaging>
   <version>1.0-SNAPSHOT</version>
-  <name>weAsk Maven Webapp</name>
+  <name>onlineVoting Maven Webapp</name>
   <url>http://maven.apache.org</url>
   <properties>
     <spring.version>4.1.9.RELEASE</spring.version>
@@ -207,17 +207,10 @@
       <version>${mysql.driver.version}</version>
       <scope>runtime</scope>
     </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.12</version>
-    </dependency>
   </dependencies>
   <build>
-    <finalName>weAsk</finalName>
+    <finalName>diary</finalName>
     <plugins>
-
-
       <plugin>
         <groupId>org.mybatis.generator</groupId>
         <artifactId>mybatis-generator-maven-plugin</artifactId>
@@ -230,6 +223,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.3.2</version>
         <configuration>
           <source>1.6</source>
           <target>1.6</target>
