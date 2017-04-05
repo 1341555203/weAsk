@@ -10,14 +10,12 @@
       <arg column="gender" javaType="java.lang.String" jdbcType="CHAR" />
       <arg column="create_date" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="update_date" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-      <arg column="attachment" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="user_type" javaType="java.lang.String" jdbcType="CHAR" />
       <arg column="del_flag" javaType="java.lang.String" jdbcType="CHAR" />
     </constructor>
   </resultMap>
   <sql id="Base_Column_List">
-    id, username, email, password, gender, create_date, update_date, attachment, user_type, 
-    del_flag
+    id, username, email, password, gender, create_date, update_date, user_type, del_flag
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -32,12 +30,12 @@
   <insert id="insert" parameterType="cn.qtech.mtf.modules.entity.User">
     insert into t_user (id, username, email, 
       password, gender, create_date, 
-      update_date, attachment, user_type, 
-      del_flag)
+      update_date, user_type, del_flag
+      )
     values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
       #{password,jdbcType=VARCHAR}, #{gender,jdbcType=CHAR}, #{createDate,jdbcType=TIMESTAMP}, 
-      #{updateDate,jdbcType=TIMESTAMP}, #{attachment,jdbcType=INTEGER}, #{userType,jdbcType=CHAR}, 
-      #{delFlag,jdbcType=CHAR})
+      #{updateDate,jdbcType=TIMESTAMP}, #{userType,jdbcType=CHAR}, #{delFlag,jdbcType=CHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="cn.qtech.mtf.modules.entity.User">
     insert into t_user
@@ -62,9 +60,6 @@
       </if>
       <if test="updateDate != null">
         update_date,
-      </if>
-      <if test="attachment != null">
-        attachment,
       </if>
       <if test="userType != null">
         user_type,
@@ -95,9 +90,6 @@
       <if test="updateDate != null">
         #{updateDate,jdbcType=TIMESTAMP},
       </if>
-      <if test="attachment != null">
-        #{attachment,jdbcType=INTEGER},
-      </if>
       <if test="userType != null">
         #{userType,jdbcType=CHAR},
       </if>
@@ -127,9 +119,6 @@
       <if test="updateDate != null">
         update_date = #{updateDate,jdbcType=TIMESTAMP},
       </if>
-      <if test="attachment != null">
-        attachment = #{attachment,jdbcType=INTEGER},
-      </if>
       <if test="userType != null">
         user_type = #{userType,jdbcType=CHAR},
       </if>
@@ -147,9 +136,23 @@
       gender = #{gender,jdbcType=CHAR},
       create_date = #{createDate,jdbcType=TIMESTAMP},
       update_date = #{updateDate,jdbcType=TIMESTAMP},
-      attachment = #{attachment,jdbcType=INTEGER},
       user_type = #{userType,jdbcType=CHAR},
       del_flag = #{delFlag,jdbcType=CHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectByEmail" parameterType="java.lang.String" resultType="cn.qtech.mtf.modules.entity.User">
+    select <include refid="Base_Column_List" />
+    from t_user
+    where email = #{email,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByEmailPassword" parameterType="cn.qtech.mtf.modules.dto.UserDto" resultType="cn.qtech.mtf.modules.entity.User">
+    select <include refid="Base_Column_List" />
+    from t_user
+    where email = #{email,jdbcType=VARCHAR}
+    and password=#{password,jdbcType=VARCHAR} and del_flag=0
+  </select>
+  <select id="findAllUser" resultMap="BaseResultMap">
+    select * from t_user WHERE del_flag=0
+  </select>
 </mapper>

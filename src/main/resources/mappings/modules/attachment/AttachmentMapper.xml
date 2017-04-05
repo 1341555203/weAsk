@@ -5,12 +5,14 @@
     <constructor>
       <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="att_type" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="owner_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="owner_type" javaType="java.lang.String" jdbcType="CHAR" />
       <arg column="att_name" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="att_origin" javaType="java.lang.String" jdbcType="VARCHAR" />
     </constructor>
   </resultMap>
   <sql id="Base_Column_List">
-    id, att_type, att_name, att_origin
+    id, att_type, owner_id, owner_type, att_name, att_origin
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -23,10 +25,12 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="cn.qtech.mtf.modules.entity.Attachment">
-    insert into t_attachment (id, att_type, att_name, 
-      att_origin)
-    values (#{id,jdbcType=INTEGER}, #{attType,jdbcType=CHAR}, #{attName,jdbcType=VARCHAR}, 
-      #{attOrigin,jdbcType=VARCHAR})
+    insert into t_attachment (id, att_type, owner_id, 
+      owner_type, att_name, att_origin
+      )
+    values (#{id,jdbcType=INTEGER}, #{attType,jdbcType=CHAR}, #{ownerId,jdbcType=INTEGER}, 
+      #{ownerType,jdbcType=CHAR}, #{attName,jdbcType=VARCHAR}, #{attOrigin,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="cn.qtech.mtf.modules.entity.Attachment">
     insert into t_attachment
@@ -36,6 +40,12 @@
       </if>
       <if test="attType != null">
         att_type,
+      </if>
+      <if test="ownerId != null">
+        owner_id,
+      </if>
+      <if test="ownerType != null">
+        owner_type,
       </if>
       <if test="attName != null">
         att_name,
@@ -51,6 +61,12 @@
       <if test="attType != null">
         #{attType,jdbcType=CHAR},
       </if>
+      <if test="ownerId != null">
+        #{ownerId,jdbcType=INTEGER},
+      </if>
+      <if test="ownerType != null">
+        #{ownerType,jdbcType=CHAR},
+      </if>
       <if test="attName != null">
         #{attName,jdbcType=VARCHAR},
       </if>
@@ -65,6 +81,12 @@
       <if test="attType != null">
         att_type = #{attType,jdbcType=CHAR},
       </if>
+      <if test="ownerId != null">
+        owner_id = #{ownerId,jdbcType=INTEGER},
+      </if>
+      <if test="ownerType != null">
+        owner_type = #{ownerType,jdbcType=CHAR},
+      </if>
       <if test="attName != null">
         att_name = #{attName,jdbcType=VARCHAR},
       </if>
@@ -77,6 +99,8 @@
   <update id="updateByPrimaryKey" parameterType="cn.qtech.mtf.modules.entity.Attachment">
     update t_attachment
     set att_type = #{attType,jdbcType=CHAR},
+      owner_id = #{ownerId,jdbcType=INTEGER},
+      owner_type = #{ownerType,jdbcType=CHAR},
       att_name = #{attName,jdbcType=VARCHAR},
       att_origin = #{attOrigin,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}

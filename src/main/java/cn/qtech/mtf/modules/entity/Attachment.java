@@ -5,13 +5,19 @@ public class Attachment {
 
     private String attType;
 
+    private Integer ownerId;
+
+    private String ownerType;
+
     private String attName;
 
     private String attOrigin;
 
-    public Attachment(Integer id, String attType, String attName, String attOrigin) {
+    public Attachment(Integer id, String attType, Integer ownerId, String ownerType, String attName, String attOrigin) {
         this.id = id;
         this.attType = attType;
+        this.ownerId = ownerId;
+        this.ownerType = ownerType;
         this.attName = attName;
         this.attOrigin = attOrigin;
     }
@@ -34,6 +40,22 @@ public class Attachment {
 
     public void setAttType(String attType) {
         this.attType = attType == null ? null : attType.trim();
+    }
+
+    public Integer getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(Integer ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public String getOwnerType() {
+        return ownerType;
+    }
+
+    public void setOwnerType(String ownerType) {
+        this.ownerType = ownerType == null ? null : ownerType.trim();
     }
 
     public String getAttName() {

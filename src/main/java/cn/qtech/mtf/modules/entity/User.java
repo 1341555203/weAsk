@@ -17,13 +17,11 @@ public class User {
 
     private Date updateDate;
 
-    private Integer attachment;
-
     private String userType;
 
     private String delFlag;
 
-    public User(Integer id, String username, String email, String password, String gender, Date createDate, Date updateDate, Integer attachment, String userType, String delFlag) {
+    public User(Integer id, String username, String email, String password, String gender, Date createDate, Date updateDate, String userType, String delFlag) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -31,7 +29,6 @@ public class User {
         this.gender = gender;
         this.createDate = createDate;
         this.updateDate = updateDate;
-        this.attachment = attachment;
         this.userType = userType;
         this.delFlag = delFlag;
     }
@@ -94,14 +91,6 @@ public class User {
 
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
-    }
-
-    public Integer getAttachment() {
-        return attachment;
-    }
-
-    public void setAttachment(Integer attachment) {
-        this.attachment = attachment;
     }
 
     public String getUserType() {

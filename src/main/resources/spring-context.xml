@@ -59,8 +59,7 @@
         <property name="dataSource" ref="dataSource"/>
         <property name="typeAliasesPackage" value="cn.qtech.mtf"/>
         <property name="typeAliasesSuperType" value="cn.qtech.mtf.common.persistence.BaseEntity"/>
-        <!--todo 生成mappig后取消注释-->
-        <!--<property name="mapperLocations" value="classpath:/mappings/modules/**/*.xml"/>-->
+        <property name="mapperLocations" value="classpath:/mappings/modules/**/*.xml"/>
         <property name="configLocation" value="classpath:/mybatis-config.xml"></property>
     </bean>
     <!-- 扫描basePackage下所有以@MyBatisDao注解的接口 -->
