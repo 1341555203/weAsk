@@ -1,6 +1,7 @@
 package cn.qtech.mtf.modules.dao;
 
 import cn.qtech.mtf.common.persistence.annotation.MyBatisDao;
+import cn.qtech.mtf.modules.dto.AttachmentDto;
 import cn.qtech.mtf.modules.entity.Attachment;
 
 @MyBatisDao
@@ -16,4 +17,6 @@ public interface AttachmentMapper {
     int updateByPrimaryKeySelective(Attachment record);
 
     int updateByPrimaryKey(Attachment record);
+
+    Attachment selectByTypeId(AttachmentDto attachmentDto);
 }

@@ -7,17 +7,23 @@ public class Question {
 
     private Integer userId;
 
+    private String title;
+
     private String content;
 
     private Date createDate;
 
+    private String finishFlag;
+
     private String delFlag;
 
-    public Question(Integer id, Integer userId, String content, Date createDate, String delFlag) {
+    public Question(Integer id, Integer userId, String title, String content, Date createDate, String finishFlag, String delFlag) {
         this.id = id;
         this.userId = userId;
+        this.title = title;
         this.content = content;
         this.createDate = createDate;
+        this.finishFlag = finishFlag;
         this.delFlag = delFlag;
     }
 
@@ -41,6 +47,14 @@ public class Question {
         this.userId = userId;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title == null ? null : title.trim();
+    }
+
     public String getContent() {
         return content;
     }
@@ -55,6 +69,14 @@ public class Question {
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
+    }
+
+    public String getFinishFlag() {
+        return finishFlag;
+    }
+
+    public void setFinishFlag(String finishFlag) {
+        this.finishFlag = finishFlag == null ? null : finishFlag.trim();
     }
 
     public String getDelFlag() {

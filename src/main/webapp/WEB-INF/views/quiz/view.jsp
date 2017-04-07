@@ -1,3 +1,10 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: mtf81
+  Date: 2017/4/7
+  Time: 23:05
+  To change this template use File | Settings | File Templates.
+--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
@@ -7,11 +14,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<%--以上标签必须放在最上 否则无法在移动端正常显示--%>
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/static/bootstrap/css/bootstrap.min.css">
-	<title>weAsk</title>
-
-	<style>
-
-	</style>
+	<title>${question.title}</title>
 </head>
 <body>
 <div class="container col-lg-8 col-lg-offset-2 ">
@@ -67,33 +70,18 @@
 			</div>
 		</div>
 	</nav>
-
-	<div class="container col col-xs-12 " style="background-color: white">
-
-		<%--<div class="list-group">--%>
-			<%--<c:forEach var="menu" items="${menuList}">--%>
-				<%--<a href="<%=request.getContextPath()%>/voting/view/${menu.id}">--%>
-					<%--<div class="list-group-item" style="margin-bottom: 10px">--%>
-						<%--<h4 class="list-group-item-heading text-center">${menu.menuTitle}--%>
-							<%--<c:if test="${menu.menuStatus==1}">--%>
-							<%--<span id="resultSpan">(投票已关闭,可查看结果)<span>--%>
-								<%--</c:if>--%>
-						<%--</h4>--%>
-						<%--<hr/>--%>
-						<%--<div class="list-group-item-text">--%>
-								<%--${menu.menuDiscription}--%>
-						<%--</div>--%>
-						<%--<p class="text-right">--%>
-								<%--${menu.createDate}--%>
-						<%--</p>--%>
-							<%--&lt;%&ndash;<a href="#" class="btn btn-block btn-primary">Cast This</a>&ndash;%&gt;--%>
-					<%--</div>--%>
-				<%--</a>--%>
-			<%--</c:forEach>--%>
-		<%--</div>--%>
+	<div class="container col-xs-12">
+		<h2>${question.title}</h2>
+		<hr>
+		<p class="text-muted">${question.createDate}</p>
+		<div>
+			${question.content}
+		</div>
+		<hr>
 	</div>
 </div>
+
+</body>
 <script src="<%=request.getContextPath()%>/static/jquery/1.11.3/jquery.min.js"></script>
 <script src="<%=request.getContextPath()%>/static/bootstrap/js/bootstrap.min.js"></script>
-</body>
 </html>

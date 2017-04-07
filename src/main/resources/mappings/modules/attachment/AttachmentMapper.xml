@@ -105,4 +105,11 @@
       att_origin = #{attOrigin,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="selectByTypeId" parameterType="cn.qtech.mtf.modules.dto.AttachmentDto" resultType="cn.qtech.mtf.modules.entity.Attachment">
+    select
+    <include refid="Base_Column_List" />
+    from t_attachment
+    where owner_type = #{ownerType,jdbcType=CHAR}
+    AND  owner_id = #{ownerId,jdbcType=INTEGER}
+  </select>
 </mapper>

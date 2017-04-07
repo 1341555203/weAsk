@@ -7,11 +7,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<%--以上标签必须放在最上 否则无法在移动端正常显示--%>
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/static/bootstrap/css/bootstrap.min.css">
-	<title>weAsk</title>
-
-	<style>
-
-	</style>
+	<link rel="stylesheet" href="<%=request.getContextPath()%>/static/wangEditor/css/wangEditor.min.css">
+	<title>发起提问</title>
 </head>
 <body>
 <div class="container col-lg-8 col-lg-offset-2 ">
@@ -67,33 +64,60 @@
 			</div>
 		</div>
 	</nav>
-
-	<div class="container col col-xs-12 " style="background-color: white">
-
-		<%--<div class="list-group">--%>
-			<%--<c:forEach var="menu" items="${menuList}">--%>
-				<%--<a href="<%=request.getContextPath()%>/voting/view/${menu.id}">--%>
-					<%--<div class="list-group-item" style="margin-bottom: 10px">--%>
-						<%--<h4 class="list-group-item-heading text-center">${menu.menuTitle}--%>
-							<%--<c:if test="${menu.menuStatus==1}">--%>
-							<%--<span id="resultSpan">(投票已关闭,可查看结果)<span>--%>
-								<%--</c:if>--%>
-						<%--</h4>--%>
-						<%--<hr/>--%>
-						<%--<div class="list-group-item-text">--%>
-								<%--${menu.menuDiscription}--%>
-						<%--</div>--%>
-						<%--<p class="text-right">--%>
-								<%--${menu.createDate}--%>
-						<%--</p>--%>
-							<%--&lt;%&ndash;<a href="#" class="btn btn-block btn-primary">Cast This</a>&ndash;%&gt;--%>
-					<%--</div>--%>
-				<%--</a>--%>
-			<%--</c:forEach>--%>
-		<%--</div>--%>
+	<div class="container col-xs-12">
+		<form method="post" action="<%=request.getContextPath()%>/quiz/startup">
+			<input type="hidden" name="userId" value="${currentUser.id}"/>
+			<div class="form-group">
+				<label class="control-label" for="inputDefault">主题</label>
+				<input type="text" class="form-control" id="inputDefault" name="title">
+			</div>
+			<div class="form-group">
+				<label class="control-label" for="inputQuiz">问题描述</label>
+				<textarea id="inputQuiz" style="height: 400px;" name="content">
+                <p>请输入内容...</p>
+			</textarea>
+			</div>
+			<div class="form-group">
+				<button type="submit" class="btn btn-primary">提交</button>
+			</div>
+		</form>
 	</div>
 </div>
+
+
+</body>
 <script src="<%=request.getContextPath()%>/static/jquery/1.11.3/jquery.min.js"></script>
 <script src="<%=request.getContextPath()%>/static/bootstrap/js/bootstrap.min.js"></script>
-</body>
+<script src="<%=request.getContextPath()%>/static/wangEditor/js/wangEditor.min.js"></script>
+<script>
+	var editor = new wangEditor('inputQuiz');
+	editor.config.menus = [
+		'source',
+		'|',
+		'bold',
+		'underline',
+		'italic',
+		'strikethrough',
+		'eraser',
+		'forecolor',
+		'|',
+		'quote',
+		'fontfamily',
+		'fontsize',
+		'unorderlist',
+		'orderlist',
+		'|',
+		'link',
+		'unlink',
+		'table',
+		'|',
+		'img',
+		'location',
+		'insertcode',
+		'|',
+		'undo',
+		'redo',
+	];
+	editor.create();
+</script>
 </html>

@@ -5,13 +5,15 @@
     <constructor>
       <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="user_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="title" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="content" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="create_date" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="finish_flag" javaType="java.lang.String" jdbcType="CHAR" />
       <arg column="del_flag" javaType="java.lang.String" jdbcType="CHAR" />
     </constructor>
   </resultMap>
   <sql id="Base_Column_List">
-    id, user_id, content, create_date, del_flag
+    id, user_id, title, content, create_date, finish_flag, del_flag
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -24,12 +26,14 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="cn.qtech.mtf.modules.entity.Question">
-    insert into t_question (id, user_id, content, 
-      create_date, del_flag)
-    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, 
-      #{createDate,jdbcType=TIMESTAMP}, #{delFlag,jdbcType=CHAR})
+    insert into t_question (id, user_id, title, 
+      content, create_date, finish_flag, 
+      del_flag)
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, 
+      #{content,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{finishFlag,jdbcType=CHAR}, 
+      #{delFlag,jdbcType=CHAR})
   </insert>
-  <insert id="insertSelective" parameterType="cn.qtech.mtf.modules.entity.Question">
+  <insert id="insertSelective" parameterType="cn.qtech.mtf.modules.entity.Question"  useGeneratedKeys="true" keyProperty="id">
     insert into t_question
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -38,11 +42,17 @@
       <if test="userId != null">
         user_id,
       </if>
+      <if test="title != null">
+        title,
+      </if>
       <if test="content != null">
         content,
       </if>
       <if test="createDate != null">
         create_date,
+      </if>
+      <if test="finishFlag != null">
+        finish_flag,
       </if>
       <if test="delFlag != null">
         del_flag,
@@ -55,16 +65,25 @@
       <if test="userId != null">
         #{userId,jdbcType=INTEGER},
       </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
       <if test="content != null">
         #{content,jdbcType=VARCHAR},
       </if>
       <if test="createDate != null">
         #{createDate,jdbcType=TIMESTAMP},
       </if>
+      <if test="finishFlag != null">
+        #{finishFlag,jdbcType=CHAR},
+      </if>
       <if test="delFlag != null">
         #{delFlag,jdbcType=CHAR},
       </if>
     </trim>
+    <selectKey resultType="Integer" order="AFTER" keyProperty="id">
+      SELECT LAST_INSERT_ID() AS id
+    </selectKey>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="cn.qtech.mtf.modules.entity.Question">
     update t_question
@@ -72,11 +91,17 @@
       <if test="userId != null">
         user_id = #{userId,jdbcType=INTEGER},
       </if>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
       <if test="content != null">
         content = #{content,jdbcType=VARCHAR},
       </if>
       <if test="createDate != null">
         create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="finishFlag != null">
+        finish_flag = #{finishFlag,jdbcType=CHAR},
       </if>
       <if test="delFlag != null">
         del_flag = #{delFlag,jdbcType=CHAR},
@@ -87,8 +112,10 @@
   <update id="updateByPrimaryKey" parameterType="cn.qtech.mtf.modules.entity.Question">
     update t_question
     set user_id = #{userId,jdbcType=INTEGER},
+      title = #{title,jdbcType=VARCHAR},
       content = #{content,jdbcType=VARCHAR},
       create_date = #{createDate,jdbcType=TIMESTAMP},
+      finish_flag = #{finishFlag,jdbcType=CHAR},
       del_flag = #{delFlag,jdbcType=CHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>

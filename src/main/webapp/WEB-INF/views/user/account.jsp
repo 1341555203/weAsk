@@ -38,8 +38,9 @@
 		<legend>
 			<ul class="breadcrumb">
 			<li class="active">我的信息</li>
-			<li><a href="<%=request.getContextPath()%>/quiz/my">我的提问</a></li>
+			<li><a href="<%=request.getContextPath()%>/quiz/myQuiz">我的提问</a></li>
 			<li><a href="<%=request.getContextPath()%>/quiz/startup">发起提问</a></li>
+				<li><a href="<%=request.getContextPath()%>/quiz/answer">我的回答</a></li>
 			<li><a href="<%=request.getContextPath()%>/user/signout">注销</a></li>
 		    </ul>
 		</legend>
