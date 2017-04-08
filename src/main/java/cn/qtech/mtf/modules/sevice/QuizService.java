@@ -1,5 +1,6 @@
 package cn.qtech.mtf.modules.sevice;
 
+import cn.qtech.mtf.modules.dto.QuizViewDto;
 import cn.qtech.mtf.modules.entity.Question;
 import cn.qtech.mtf.modules.entity.User;
 
@@ -15,4 +16,5 @@ public interface QuizService {
 	List<Question> getAllQuiz();
 	List<Question> getQuizByUserId(Integer userId);
 
+	QuizViewDto getQuizViewDtosByQuestionId(Integer questionId);
 }

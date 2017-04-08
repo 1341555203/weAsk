@@ -1,6 +1,8 @@
 package cn.qtech.mtf.modules.web;
 
+import cn.qtech.mtf.modules.entity.Answer;
 import cn.qtech.mtf.modules.entity.Question;
+import cn.qtech.mtf.modules.sevice.AnswerService;
 import cn.qtech.mtf.modules.sevice.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,8 +22,12 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("/quiz")
 public class QuizController {
+
+	@Autowired
+	private AnswerService answerService;
 	@Autowired
 	private QuizService quizService;
+
 	@RequestMapping(value = "/startup",method = RequestMethod.GET)
 	public String startupPage(){
 
@@ -44,5 +50,12 @@ public class QuizController {
 		Question quiz=quizService.getQuizById(id);
 		model.addAttribute(quiz);
 		return "quiz/view";
+	}
+
+	@RequestMapping(value = "/answer",method = RequestMethod.POST)
+	public String postAnswer(@Valid Answer answer){
+		answerService.saveAnswer(answer);
+
+		return "redirect:/quiz/view/"+answer.getQuestionId();
 	}
 }

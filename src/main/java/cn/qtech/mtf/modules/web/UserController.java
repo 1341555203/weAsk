@@ -33,9 +33,8 @@ public class UserController {
 
 		return "user/login";
 	}
-
 	@RequestMapping(value = "/login",method = RequestMethod.POST)
-	public String login(@Valid UserDto userDto, Errors errors, HttpSession httpSession){
+	public String login(@Valid UserDto userDto, Errors errors, HttpSession httpSession,Model model){
 
 		userDto.setPassword(EncodeUtil.EncodeByMd5(userDto.getPassword()));
 		if(errors.hasErrors()){
@@ -52,6 +51,26 @@ public class UserController {
 		}
 		return "user/login";
 	}
+
+	@RequestMapping(value = "/loginAjax",method = RequestMethod.POST)
+	public String loginAjax(@Valid UserDto userDto, Errors errors, HttpSession httpSession,Model model){
+
+		userDto.setPassword(EncodeUtil.EncodeByMd5(userDto.getPassword()));
+		if(errors.hasErrors()){
+			return "fail";
+		}
+		User currentUser=userService.selectByEmailPassword(userDto);
+		if(currentUser!=null){
+			if(currentUser.getUserType().equals("1")){
+				httpSession.setAttribute("admin",currentUser);
+				return "success";
+			}
+			httpSession.setAttribute("currentUser",currentUser);
+			return "success";
+		}
+		return "fail";
+	}
+
 
 	@RequestMapping(value = "/signUp",method = RequestMethod.GET)
 	public String signUpInit(){
