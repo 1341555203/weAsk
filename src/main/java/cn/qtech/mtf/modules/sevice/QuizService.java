@@ -1,8 +1,8 @@
 package cn.qtech.mtf.modules.sevice;
 
 import cn.qtech.mtf.modules.dto.QuizViewDto;
+import cn.qtech.mtf.modules.entity.Choice;
 import cn.qtech.mtf.modules.entity.Question;
-import cn.qtech.mtf.modules.entity.User;
 
 import java.util.List;
 
@@ -15,6 +15,8 @@ public interface QuizService {
 	Question getQuizById(Integer id);
 	List<Question> getAllQuiz();
 	List<Question> getQuizByUserId(Integer userId);
-
+	List<Question> getAnswerdQuizByUserId(Integer userId);
 	QuizViewDto getQuizViewDtosByQuestionId(Integer questionId);
+
+	void chooseAnswer(Choice choice);
 }

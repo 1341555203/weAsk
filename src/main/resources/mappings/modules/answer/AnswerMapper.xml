@@ -108,4 +108,10 @@
       del_flag = #{delFlag,jdbcType=CHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="getAnswersByQuestionId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+      SELECT * from t_answer
+      where del_flag=0 and question_id= #{id,jdbcType=INTEGER}
+      ORDER BY  create_date desc
+  </select>
 </mapper>

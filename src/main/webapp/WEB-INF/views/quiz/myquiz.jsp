@@ -1,16 +1,24 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<%--以上标签必须放在最上 否则无法在移动端正常显示--%>
+	<title>我的提问</title>
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/static/bootstrap/css/bootstrap.min.css">
-	<title>weAsk</title>
-
 	<style>
-
+		.whitebg{
+			background-color:white;
+		}
+		.breadcrumb li{
+			font-size: medium;
+		}
+		#userIcon img{
+			width: 120px;
+			height:120px;
+		}
 	</style>
 </head>
 <body>
@@ -44,21 +52,11 @@
 
 								<li class="divider"></li>
 								<li><a href="<%=request.getContextPath()%>/user/signout">注销</a></li>
-									<%--<li class="divider"></li>--%>
-									<%--<li><a href="#">One more separated link</a></li>--%>
 							</ul>
 						</li>
 					</c:if>
 				</ul>
-				<%--<form class="navbar-form navbar-left" role="search">--%>
-				<%--<div class="form-group">--%>
-				<%--<input type="text" class="form-control" placeholder="Search">--%>
-				<%--</div>--%>
-				<%--<button type="submit" class="btn btn-default">Search</button>--%>
-				<%--</form>--%>
 				<ul class="nav navbar-nav navbar-right">
-					<%--c:if 判断 若已登录则试用dropdown显示当前用户--%>
-					<%--<li><a href="<%=request.getContextPath()%>/user/signup">Sign Up<span class="sr-only">(current)</span></a></li>--%>
 					<c:if test="${currentUser==null}">
 						<li><a href="<%=request.getContextPath()%>/user/login">Sign in</a></li>
 					</c:if>
@@ -67,28 +65,23 @@
 			</div>
 		</div>
 	</nav>
-
-	<div class="container col col-xs-12 " style="background-color: white">
-
-		<c:forEach items="${allQuiz}" var="question">
-			<h3>${question.title}</h3>
-				<div class="questionContent" data-src="<%=request.getContextPath()%>/quiz/view/${question.id}" style="height: 300px; overflow: hidden;">${question.content}</div>
-			<hr>
-			<%--<a href="<%=request.getContextPath()%>/quiz/view/${question.id}" class="btn btn-sm btn-primary">查看</a>--%>
-			<%--<hr>--%>
-		</c:forEach>
-
+	<br>
+	<div class="container col-xs-12 whitebg">
+		<legend>
+		我的提问
+		</legend>
+		<div class="col-xs-10 col-xs-offset-1">
+			<c:forEach items="${myQuestions}" var="question">
+				<h3>${question.title}</h3>
+				<a href="<%=request.getContextPath()%>/quiz/view/${question.id}" class="btn btn-primary">查看</a>
+				<hr>
+			</c:forEach>
+		</div>
 	</div>
 </div>
+
+</body>
 <script src="<%=request.getContextPath()%>/static/jquery/1.11.3/jquery.min.js"></script>
 <script src="<%=request.getContextPath()%>/static/bootstrap/js/bootstrap.min.js"></script>
-<script>
-	$(function(){
-		$(".questionContent").on("click",function(){
-//			alert(this.dataset.src);
-			window.location = this.dataset.src;
-		});
-	});
-</script>
-</body>
+
 </html>

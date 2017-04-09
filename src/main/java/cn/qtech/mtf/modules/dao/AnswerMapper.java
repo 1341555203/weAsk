@@ -3,6 +3,8 @@ package cn.qtech.mtf.modules.dao;
 import cn.qtech.mtf.common.persistence.annotation.MyBatisDao;
 import cn.qtech.mtf.modules.entity.Answer;
 
+import java.util.List;
+
 @MyBatisDao
 public interface AnswerMapper {
     int deleteByPrimaryKey(Integer id);
@@ -16,4 +18,6 @@ public interface AnswerMapper {
     int updateByPrimaryKeySelective(Answer record);
 
     int updateByPrimaryKey(Answer record);
+
+    List<Answer> getAnswersByQuestionId(Integer id);
 }

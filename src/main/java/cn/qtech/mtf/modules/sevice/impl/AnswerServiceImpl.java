@@ -35,7 +35,7 @@ public class AnswerServiceImpl implements AnswerService{
 
 	@Override
 	public List<Answer> getAnswerByQuestionId(Integer questionId) {
-		return null;
+		return answerMapper.getAnswersByQuestionId(questionId);
 	}
 
 	@Override

@@ -119,4 +119,24 @@
       del_flag = #{delFlag,jdbcType=CHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <update id="setFinishByPrimaryKey" parameterType="java.lang.Integer">
+     update t_question
+    set
+      finish_flag = 1
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="getQuestionByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select * from t_question
+    WHERE user_id =  #{id,jdbcType=INTEGER} and del_flag = 0 ORDER BY create_date DESC
+  </select>
+    <select id="getAnswerdQuizByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+       select * from t_question q, t_answer a
+       where a.user_id =   #{id,jdbcType=INTEGER} and q.id= a.question_id and a.del_flag = 0
+         order by a.create_date desc;
+    </select>
+    <select id="getAllQuiz" resultMap="BaseResultMap">
+        select * from t_question
+        where del_flag = 0 order by create_date DESC ;
+    </select>
 </mapper>

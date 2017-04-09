@@ -1,7 +1,10 @@
 package cn.qtech.mtf.modules.web;
 
+import cn.qtech.mtf.modules.dto.QuizViewDto;
 import cn.qtech.mtf.modules.entity.Answer;
+import cn.qtech.mtf.modules.entity.Choice;
 import cn.qtech.mtf.modules.entity.Question;
+import cn.qtech.mtf.modules.entity.User;
 import cn.qtech.mtf.modules.sevice.AnswerService;
 import cn.qtech.mtf.modules.sevice.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * Created by mtf81 on 2017/4/6.
@@ -47,8 +51,12 @@ public class QuizController {
 	@RequestMapping(value = "/view/{id}",method = RequestMethod.GET)
 	public String view(@PathVariable int id,Model model){
 		int quizId =id;
-		Question quiz=quizService.getQuizById(id);
-		model.addAttribute(quiz);
+//		Question quiz=quizService.getQuizById(id);
+
+		QuizViewDto quizViewDto=quizService.getQuizViewDtosByQuestionId(quizId);
+		model.addAttribute(quizViewDto);
+		System.out.println(quizViewDto);
+
 		return "quiz/view";
 	}
 
@@ -57,5 +65,30 @@ public class QuizController {
 		answerService.saveAnswer(answer);
 
 		return "redirect:/quiz/view/"+answer.getQuestionId();
+	}
+
+	@RequestMapping(value = "/chooseAnswer",method = RequestMethod.POST)
+	public String chooseAnswer(Choice choice){
+
+		quizService.chooseAnswer(choice);
+
+		return  "redirect:/quiz/view/"+choice.getquestionId();
+	}
+
+//我的提问
+	@RequestMapping(value = "/myQuiz", method = RequestMethod.GET)
+	public String myQuiz(HttpSession httpSession,Model model) {
+		User currentUser = (User) httpSession.getAttribute("currentUser");
+		List<Question> myQuestions=quizService.getQuizByUserId(currentUser.getId());
+		model.addAttribute("myQuestions", myQuestions);
+		return "quiz/myquiz";
+	}
+
+	@RequestMapping(value = "/answer", method = RequestMethod.GET)
+	public String myAnswer(HttpSession httpSession,Model model) {
+		User currentUser = (User) httpSession.getAttribute("currentUser");
+		List<Question> myAnsweredQuestions=quizService.getAnswerdQuizByUserId(currentUser.getId());
+		model.addAttribute("myAnsweredQuestions", myAnsweredQuestions);
+		return "quiz/myanswer";
 	}
 }

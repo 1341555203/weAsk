@@ -1,17 +1,17 @@
 package cn.qtech.mtf.modules.sevice.impl;
 
 import cn.qtech.mtf.modules.dao.AnswerMapper;
+import cn.qtech.mtf.modules.dao.ChoiceMapper;
 import cn.qtech.mtf.modules.dao.QuestionMapper;
 import cn.qtech.mtf.modules.dao.UserMapper;
 import cn.qtech.mtf.modules.dto.AnswerDto;
 import cn.qtech.mtf.modules.dto.QuizViewDto;
 import cn.qtech.mtf.modules.entity.Answer;
+import cn.qtech.mtf.modules.entity.Choice;
 import cn.qtech.mtf.modules.entity.Question;
 import cn.qtech.mtf.modules.entity.User;
 import cn.qtech.mtf.modules.sevice.AnswerService;
 import cn.qtech.mtf.modules.sevice.QuizService;
-import cn.qtech.mtf.modules.sevice.UserService;
-import org.omg.IOP.TAG_ALTERNATE_IIOP_ADDRESS;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +32,8 @@ public class QuizServiceImpl implements QuizService {
 	private AnswerMapper answerMapper;
 	@Autowired
 	private AnswerService answerService;
+	@Autowired
+	private ChoiceMapper choiceMapper;
 
 	@Override
 	public int saveQuiz(Question question) {
@@ -52,16 +54,23 @@ public class QuizServiceImpl implements QuizService {
 
 	@Override
 	public List<Question> getAllQuiz() {
-		return null;
+		return questionMapper.getAllQuiz();
 	}
 
 	@Override
 	public List<Question> getQuizByUserId(Integer userId) {
-		return null;
+		return questionMapper.getQuestionByUserId(userId);
+	}
+
+	@Override
+	public List<Question> getAnswerdQuizByUserId(Integer userId) {
+		return questionMapper.getAnswerdQuizByUserId(userId);
 	}
 
 	@Override
 	public QuizViewDto getQuizViewDtosByQuestionId(Integer questionId) {
+		Answer choicedAnswer =null;
+		AnswerDto choiceAnswerDto = null;
 		QuizViewDto quizViewDto =new QuizViewDto();
 //		获得Question
 		Question question = this.getQuizById(questionId);
@@ -71,19 +80,36 @@ public class QuizServiceImpl implements QuizService {
 		List<Answer> answers = answerService.getAnswerByQuestionId(questionId);
 //		遍历answers，找到对应回答者User，整合到AnserDto中，加入到List里
 		List<AnswerDto> answerDtos = new ArrayList<AnswerDto>();
-		for(Answer a:answers){
-			AnswerDto answerDto = new AnswerDto();
-			User replier = new User();
-			replier = userMapper.selectByPrimaryKey(a.getUserId());
-			answerDto.setAnswer(a);
-			answerDto.setUser(replier);
-			answerDtos.add(answerDto);
+
+		Choice choice= choiceMapper.selectByQuestionId(questionId);
+
+		if(answers!=null){
+			for(Answer a:answers){
+					AnswerDto answerDto = new AnswerDto();
+					User replier =  userMapper.selectByPrimaryKey(a.getUserId());
+					answerDto.setAnswer(a);
+					answerDto.setUser(replier);
+				if (choice!=null && a.getId() == choice.getAnswerId()){
+					choiceAnswerDto = answerDto;
+				}else {
+					answerDtos.add(answerDto);
+				}
+
+			}
 		}
+
 //		将结果添加到quziViewDto中返回
 		quizViewDto.setQuestion(question);
 		quizViewDto.setAsker(asker);
 		quizViewDto.setAnswers(answerDtos);
+		quizViewDto.setChoicedAnswer(choiceAnswerDto);
 
 		return quizViewDto;
+	}
+
+	@Override
+	public void chooseAnswer(Choice choice) {
+		choiceMapper.insertSelective(choice);
+		questionMapper.setFinishByPrimaryKey(choice.getquestionId());
 	}
 }

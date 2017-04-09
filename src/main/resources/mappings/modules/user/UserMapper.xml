@@ -155,4 +155,6 @@
   <select id="findAllUser" resultMap="BaseResultMap">
     select * from t_user WHERE del_flag=0
   </select>
+
+
 </mapper>

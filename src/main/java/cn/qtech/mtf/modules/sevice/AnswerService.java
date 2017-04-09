@@ -16,5 +16,4 @@ public interface AnswerService {
 	List<Answer> getAnswerByUserId(Integer id);
 	List<Answer> getAllAnswer();
 
-
 }

@@ -30,7 +30,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="<%=request.getContextPath()%>/sys/home">VOTE</a>
+				<a class="navbar-brand" href="<%=request.getContextPath()%>/sys/home">weAsk</a>
 			</div>
 
 			<div class="navbar-collapse collapse" id="bs-example-navbar-collapse-2" aria-expanded="false"
@@ -74,14 +74,14 @@
 	</nav>
 	<div class="container col-xs-12">
 
-		<h2>${question.title}</h2>
+		<h2>${quizViewDto.question.title}</h2>
 		<hr>
-		<p class="text-muted">${question.createDate}</p>
+		<p class="text-muted">${quizViewDto.question.createDate} by ${quizViewDto.asker.username}</p>
 		<div>
-			${question.content}
+			${quizViewDto.question.content}
 		</div>
 		<hr>
-		<c:if test="${question.finishFlag==0}">
+		<c:if test="${quizViewDto.question.finishFlag==0}">
 			<c:choose>
 				<c:when test="${currentUser!=null}">
 					<a href="#" class="btn btn-primary" data-toggle="modal" data-target="#answerModal">我要回答</a>
@@ -93,6 +93,30 @@
 			</c:choose>
 		</c:if>
 		<hr>
+		<c:if test="${quizViewDto.choicedAnswer!=null}">
+		<legend>最佳回答</legend>
+		<p>${quizViewDto.choicedAnswer.answer.createDate} by ${quizViewDto.choicedAnswer.user.username}</p>
+		${quizViewDto.choicedAnswer.answer.content}
+		</c:if>
+		<hr>
+		<legend>所有回答</legend>
+		<c:forEach items="${quizViewDto.answers}" var="answerDto">
+			<p>${answerDto.answer.createDate} by ${answerDto.user.username}</p>
+			${answerDto.answer.content}
+			<c:if test="${currentUser.id==quizViewDto.question.userId}">
+				<c:if test="${quizViewDto.choicedAnswer==null}">
+				<form method="post" action="<%=request.getContextPath()%>/quiz/chooseAnswer">
+					<input type="hidden" name="questionId" value="${answerDto.answer.questionId}">
+					<input type="hidden" name="replierId" value="${answerDto.answer.userId}">
+					<input type="hidden" name="answerId" value="${answerDto.answer.id}">
+					<button type="submit" class="btn btn-default">选为最佳</button>
+				</form>
+				</c:if>
+			</c:if>
+			<hr/>
+		</c:forEach>
+		<hr>
+		<p>没有更多啦...</p>
 	</div>
 
 </div>
@@ -131,7 +155,7 @@
 <%--回答modal--%>
 <form method="post" action="<%=request.getContextPath()%>/quiz/answer">
 	<input type="hidden" name="userId" value="${currentUser.id}"/>
-	<input type="hidden" name="questionId" value="${question.id}"/>
+	<input type="hidden" name="questionId" value="${quizViewDto.question.id}"/>
 	<div class="modal" id="answerModal">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -154,6 +178,7 @@
 <script src="<%=request.getContextPath()%>/static/bootstrap/js/bootstrap.min.js"></script>
 <script src="<%=request.getContextPath()%>/static/wangEditor/js/wangEditor.min.js"></script>
 <script>
+	//init the editor
 	var editor = new wangEditor('inputAnswer');
 	editor.config.menus = [
 		'source',
@@ -199,7 +224,7 @@
 					'email': email, 'password': password
 				},
 				success: function (data) {
-					alert(data);
+//					alert(data);
 					if (data.msg == "success") {
 
 					}else if(data.msg == "fail"){

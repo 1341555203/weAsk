@@ -25,4 +25,6 @@ public interface UserMapper {
 	User selectByEmailPassword(UserDto userDto);
 
 	List<User> findAllUser();
+
+
 }

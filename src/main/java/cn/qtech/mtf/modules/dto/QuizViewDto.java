@@ -14,6 +14,15 @@ public class QuizViewDto {
 	User asker;
 	Question question;
 	List<AnswerDto> answers;
+	AnswerDto choicedAnswer;
+
+	public AnswerDto getChoicedAnswer() {
+		return choicedAnswer;
+	}
+
+	public void setChoicedAnswer(AnswerDto choicedAnswer) {
+		this.choicedAnswer = choicedAnswer;
+	}
 
 	public User getAsker() {
 		return asker;
@@ -37,5 +46,15 @@ public class QuizViewDto {
 
 	public void setAnswers(List<AnswerDto> answers) {
 		this.answers = answers;
+	}
+
+	@Override
+	public String toString() {
+		return "QuizViewDto{" +
+				"asker=" + asker +
+				", question=" + question +
+				", answers=" + answers +
+				", choicedAnswer=" + choicedAnswer +
+				'}';
 	}
 }

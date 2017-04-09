@@ -28,109 +28,115 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	@RequestMapping(value = "/login",method = RequestMethod.GET)
-	public String loginPage(){
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public String loginPage() {
 
 		return "user/login";
 	}
-	@RequestMapping(value = "/login",method = RequestMethod.POST)
-	public String login(@Valid UserDto userDto, Errors errors, HttpSession httpSession,Model model){
+
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	public String login(@Valid UserDto userDto, Errors errors, HttpSession httpSession, Model model) {
 
 		userDto.setPassword(EncodeUtil.EncodeByMd5(userDto.getPassword()));
-		if(errors.hasErrors()){
+		if (errors.hasErrors()) {
 			return "user/login";
 		}
-		User currentUser=userService.selectByEmailPassword(userDto);
-		if(currentUser!=null){
-			if(currentUser.getUserType().equals("1")){
-				httpSession.setAttribute("admin",currentUser);
+		User currentUser = userService.selectByEmailPassword(userDto);
+		if (currentUser != null) {
+			if (currentUser.getUserType().equals("1")) {
+				httpSession.setAttribute("admin", currentUser);
 				return "redirect:/admin/desk";
 			}
-			httpSession.setAttribute("currentUser",currentUser);
+			httpSession.setAttribute("currentUser", currentUser);
 			return "redirect:/user/account";
 		}
 		return "user/login";
 	}
 
-	@RequestMapping(value = "/loginAjax",method = RequestMethod.POST)
-	public String loginAjax(@Valid UserDto userDto, Errors errors, HttpSession httpSession,Model model){
+	@RequestMapping(value = "/loginAjax", method = RequestMethod.POST)
+	public String loginAjax(@Valid UserDto userDto, Errors errors, HttpSession httpSession, Model model) {
 
 		userDto.setPassword(EncodeUtil.EncodeByMd5(userDto.getPassword()));
-		if(errors.hasErrors()){
+		if (errors.hasErrors()) {
 			return "fail";
 		}
-		User currentUser=userService.selectByEmailPassword(userDto);
-		if(currentUser!=null){
-			if(currentUser.getUserType().equals("1")){
-				httpSession.setAttribute("admin",currentUser);
+		User currentUser = userService.selectByEmailPassword(userDto);
+		if (currentUser != null) {
+			if (currentUser.getUserType().equals("1")) {
+				httpSession.setAttribute("admin", currentUser);
 				return "success";
 			}
-			httpSession.setAttribute("currentUser",currentUser);
+			httpSession.setAttribute("currentUser", currentUser);
 			return "success";
 		}
 		return "fail";
 	}
 
 
-	@RequestMapping(value = "/signUp",method = RequestMethod.GET)
-	public String signUpInit(){
+	@RequestMapping(value = "/signUp", method = RequestMethod.GET)
+	public String signUpInit() {
 
 		return "user/signup";
 	}
-	@RequestMapping(value="/signUp",method = RequestMethod.POST)
-	public String signUp(@Valid UserDto userDto, Errors errors, ModelMap modelMap){
-		if(errors.hasErrors()){
+
+	@RequestMapping(value = "/signUp", method = RequestMethod.POST)
+	public String signUp(@Valid UserDto userDto, Errors errors, ModelMap modelMap) {
+		if (errors.hasErrors()) {
+			return "user/signup";
+		} else if (userService.selectByEmail(userDto.getEmail()) != null) {
+			modelMap.put("errorMessage", "邮箱已存在!");
 			return "user/signup";
 		}
-		else if(userService.selectByEmail(userDto.getEmail())!=null){
-			modelMap.put("errorMessage","邮箱已存在!");
-			return "user/signup";
-		}
-		User user=new User();
+		User user = new User();
 		user.setEmail(userDto.getEmail());
 		user.setPassword(EncodeUtil.EncodeByMd5(userDto.getPassword()));
 		user.setUsername(userDto.getUsername());
 		userService.register(user);
-		modelMap.addAttribute("userDto",user);
+		modelMap.addAttribute("userDto", user);
 		return "redirect:/user/success";
 	}
 
-	@RequestMapping(value = "/success",method = RequestMethod.GET)
-	public String success(){
+	@RequestMapping(value = "/success", method = RequestMethod.GET)
+	public String success() {
 
 		return "user/success";
 	}
-	@RequestMapping(value = "/account",method = RequestMethod.GET)
-	public String account(HttpSession httpSession,Model model){
-		User currentUser=(User)httpSession.getAttribute("currentUser");
-		if(currentUser!=null) {
+
+	@RequestMapping(value = "/account", method = RequestMethod.GET)
+	public String account(HttpSession httpSession, Model model) {
+		User currentUser = (User) httpSession.getAttribute("currentUser");
+		if (currentUser != null) {
 			model.addAttribute(currentUser);
 			return "user/account";
 		}
 		return "redirect:/user/login";
 	}
+
 	/*
 	user/account/update
 	 */
-	@RequestMapping(value = "/account/update",method = RequestMethod.GET)
-	public String updateInit(HttpSession httpSession,Model model){
-		model.addAttribute("currentUser",httpSession.getAttribute("currentUser"));
+	@RequestMapping(value = "/account/update", method = RequestMethod.GET)
+	public String updateInit(HttpSession httpSession, Model model) {
+		model.addAttribute("currentUser", httpSession.getAttribute("currentUser"));
 		return "user/account_update";
 	}
-	@RequestMapping(value = "/account/update",method = RequestMethod.POST)
-	public String updateAccount(UserDto userDto,HttpSession httpSession){
+
+	@RequestMapping(value = "/account/update", method = RequestMethod.POST)
+	public String updateAccount(UserDto userDto, HttpSession httpSession) {
 		System.out.println(userDto);
-		User user=(User)httpSession.getAttribute("currentUser");
+		User user = (User) httpSession.getAttribute("currentUser");
 		user.setUsername(userDto.getUsername());
 		user.setGender(userDto.getGender());
 		userService.update(user);
 		return "redirect:/user/account";
 	}
 
-	@RequestMapping(value = "/signout",method = RequestMethod.GET)
-	public String signOut(SessionStatus sessionStatus){
+	@RequestMapping(value = "/signout", method = RequestMethod.GET)
+	public String signOut(SessionStatus sessionStatus) {
 		sessionStatus.setComplete();
 		return "redirect:/sys/home";
 	}
+
+
 
 }

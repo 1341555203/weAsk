@@ -9,6 +9,15 @@ import cn.qtech.mtf.modules.entity.User;
 public class AnswerDto {
 	User user;
 	Answer answer;
+	boolean isChoice;
+
+	public boolean isChoice() {
+		return isChoice;
+	}
+
+	public void setChoice(boolean choice) {
+		isChoice = choice;
+	}
 
 	public User getUser() {
 		return user;
