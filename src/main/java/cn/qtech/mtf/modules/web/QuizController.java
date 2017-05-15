@@ -32,63 +32,77 @@ public class QuizController {
 	@Autowired
 	private QuizService quizService;
 
-	@RequestMapping(value = "/startup",method = RequestMethod.GET)
-	public String startupPage(){
+	@RequestMapping(value = "/startup", method = RequestMethod.GET)
+	public String startupPage() {
 
 		return "quiz/startup";
 	}
 
-	@RequestMapping(value = "/startup",method = RequestMethod.POST)
-	public String startUp(@Valid Question question, Errors errors, HttpSession httpSession){
-		if(errors.hasErrors()){
+	@RequestMapping(value = "/startup", method = RequestMethod.POST)
+	public String startUp(@Valid Question question, Errors errors, HttpSession httpSession) {
+		if (errors.hasErrors()) {
 			return "quiz/startup";
 		}
-		Question question1=question;
+		Question question1 = question;
 		int savedQuizId;
-		savedQuizId=quizService.saveQuiz(question1);
-		return "redirect:/quiz/view/"+savedQuizId;
+		savedQuizId = quizService.saveQuiz(question1);
+		return "redirect:/quiz/view/" + savedQuizId;
 	}
-	@RequestMapping(value = "/view/{id}",method = RequestMethod.GET)
-	public String view(@PathVariable int id,Model model){
-		int quizId =id;
+
+	@RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
+	public String view(@PathVariable int id, Model model) {
+		int quizId = id;
 //		Question quiz=quizService.getQuizById(id);
 
-		QuizViewDto quizViewDto=quizService.getQuizViewDtosByQuestionId(quizId);
+		QuizViewDto quizViewDto = quizService.getQuizViewDtosByQuestionId(quizId);
 		model.addAttribute(quizViewDto);
 		System.out.println(quizViewDto);
 
 		return "quiz/view";
 	}
 
-	@RequestMapping(value = "/answer",method = RequestMethod.POST)
-	public String postAnswer(@Valid Answer answer){
+	@RequestMapping(value = "/answer", method = RequestMethod.POST)
+	public String postAnswer(@Valid Answer answer) {
 		answerService.saveAnswer(answer);
 
-		return "redirect:/quiz/view/"+answer.getQuestionId();
+		return "redirect:/quiz/view/" + answer.getQuestionId();
 	}
 
-	@RequestMapping(value = "/chooseAnswer",method = RequestMethod.POST)
-	public String chooseAnswer(Choice choice){
+	@RequestMapping(value = "/chooseAnswer", method = RequestMethod.POST)
+	public String chooseAnswer(Choice choice) {
 
 		quizService.chooseAnswer(choice);
 
-		return  "redirect:/quiz/view/"+choice.getquestionId();
+		return "redirect:/quiz/view/" + choice.getquestionId();
 	}
 
-//我的提问
+	//我的提问
 	@RequestMapping(value = "/myQuiz", method = RequestMethod.GET)
-	public String myQuiz(HttpSession httpSession,Model model) {
+	public String myQuiz(HttpSession httpSession, Model model) {
 		User currentUser = (User) httpSession.getAttribute("currentUser");
-		List<Question> myQuestions=quizService.getQuizByUserId(currentUser.getId());
+		List<Question> myQuestions = quizService.getQuizByUserId(currentUser.getId());
 		model.addAttribute("myQuestions", myQuestions);
 		return "quiz/myquiz";
 	}
 
 	@RequestMapping(value = "/answer", method = RequestMethod.GET)
-	public String myAnswer(HttpSession httpSession,Model model) {
+	public String myAnswer(HttpSession httpSession, Model model) {
 		User currentUser = (User) httpSession.getAttribute("currentUser");
-		List<Question> myAnsweredQuestions=quizService.getAnswerdQuizByUserId(currentUser.getId());
+		List<Question> myAnsweredQuestions = quizService.getAnswerdQuizByUserId(currentUser.getId());
 		model.addAttribute("myAnsweredQuestions", myAnsweredQuestions);
 		return "quiz/myanswer";
+	}
+
+	@RequestMapping(value = "/search/{type}/{keyWord}", method = RequestMethod.GET)
+	public String search(@PathVariable String type, @PathVariable String keyWord, Model model) {
+		List<Question> questions = null;
+		if (!(keyWord == null) && !(keyWord.equals("")))
+			if (type.equals("title")) {
+				questions = quizService.getQuestionsByTitleKeyWord(keyWord);
+			} else if (type.equals("content")) {
+				questions = quizService.getQuestionsByContentKeyWord(keyWord);
+			}
+		model.addAttribute("questions", questions);
+		return "quiz/search";
 	}
 }

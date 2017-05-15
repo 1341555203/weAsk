@@ -24,6 +24,10 @@ public interface QuestionMapper {
     List<Question> getQuestionByUserId(Integer id);
 
     List<Question> getAnswerdQuizByUserId(Integer id);
+
 	List<Question> getAllQuiz();
 
+	List<Question> getQuestionsByTitleKeyWord(String keyWord);
+
+	List<Question> getQuestionsByContentKeyWord(String keyWord);
 }

@@ -25,6 +25,7 @@ public class SysController {
 
 		List<Question> allQuiz = quizService.getAllQuiz();
 		model.addAttribute("allQuiz",allQuiz);
+
 		return "sys/home";
 	}
 

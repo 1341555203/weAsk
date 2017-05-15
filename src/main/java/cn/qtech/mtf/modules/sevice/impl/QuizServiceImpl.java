@@ -37,8 +37,8 @@ public class QuizServiceImpl implements QuizService {
 
 	@Override
 	public int saveQuiz(Question question) {
-		 questionMapper.insertSelective(question);
-		int id=question.getId();
+		questionMapper.insertSelective(question);
+		int id = question.getId();
 		return id;
 	}
 
@@ -63,15 +63,25 @@ public class QuizServiceImpl implements QuizService {
 	}
 
 	@Override
+	public List<Question> getQuestionsByTitleKeyWord(String keyWord) {
+		return questionMapper.getQuestionsByTitleKeyWord("%"+keyWord+"%");
+	}
+
+	@Override
+	public List<Question> getQuestionsByContentKeyWord(String keyWord) {
+		return questionMapper.getQuestionsByContentKeyWord("%"+keyWord+"%");
+	}
+
+	@Override
 	public List<Question> getAnswerdQuizByUserId(Integer userId) {
 		return questionMapper.getAnswerdQuizByUserId(userId);
 	}
 
 	@Override
 	public QuizViewDto getQuizViewDtosByQuestionId(Integer questionId) {
-		Answer choicedAnswer =null;
+		Answer choicedAnswer = null;
 		AnswerDto choiceAnswerDto = null;
-		QuizViewDto quizViewDto =new QuizViewDto();
+		QuizViewDto quizViewDto = new QuizViewDto();
 //		获得Question
 		Question question = this.getQuizById(questionId);
 //		获得提问者User
@@ -81,24 +91,24 @@ public class QuizServiceImpl implements QuizService {
 //		遍历answers，找到对应回答者User，整合到AnserDto中，加入到List里
 		List<AnswerDto> answerDtos = new ArrayList<AnswerDto>();
 
-		Choice choice= choiceMapper.selectByQuestionId(questionId);
+		Choice choice = choiceMapper.selectByQuestionId(questionId);
 
-		if(answers!=null){
-			for(Answer a:answers){
-					AnswerDto answerDto = new AnswerDto();
-					User replier =  userMapper.selectByPrimaryKey(a.getUserId());
-					answerDto.setAnswer(a);
-					answerDto.setUser(replier);
-				if (choice!=null && a.getId() == choice.getAnswerId()){
+		if (answers != null) {
+			for (Answer a : answers) {
+				AnswerDto answerDto = new AnswerDto();
+				User replier = userMapper.selectByPrimaryKey(a.getUserId());
+				answerDto.setAnswer(a);
+				answerDto.setUser(replier);
+				if (choice != null && a.getId() == choice.getAnswerId()) {
 					choiceAnswerDto = answerDto;
-				}else {
+				} else {
 					answerDtos.add(answerDto);
 				}
 
 			}
 		}
 
-//		将结果添加到quziViewDto中返回
+//		将结果添加到quziViewDto中
 		quizViewDto.setQuestion(question);
 		quizViewDto.setAsker(asker);
 		quizViewDto.setAnswers(answerDtos);
