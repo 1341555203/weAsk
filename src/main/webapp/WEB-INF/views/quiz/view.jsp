@@ -20,8 +20,14 @@
 			box-shadow: 4px 4px 5px 4px #888888;
 			margin-bottom: 20px;
 		}
+
+		.commentorIcon {
+			width: 30px;
+			height: 30px;
+			border: 3px solid #2aabd2;
+		}
 	</style>
-	<title>${question.title}</title>
+	<title>${quizViewDto.question.title}</title>
 </head>
 <body>
 <div class="container col-lg-8 col-lg-offset-2 ">
@@ -70,7 +76,7 @@
 					<%--c:if 判断 若已登录则试用dropdown显示当前用户--%>
 					<%--<li><a href="<%=request.getContextPath()%>/user/signup">Sign Up<span class="sr-only">(current)</span></a></li>--%>
 					<c:if test="${currentUser==null}">
-						<li><a href="<%=request.getContextPath()%>/user/login">Sign in</a></li>
+						<li><a href="#" data-toggle="modal" data-target="#loginModal">Sign in</a></li>
 					</c:if>
 					<li><a href="<%=request.getContextPath()%>/sys/help">help</a></li>
 				</ul>
@@ -78,7 +84,7 @@
 		</div>
 	</nav>
 	<div class="container col-xs-12 ">
-		<div class="container col-xs-12 quiz-container">
+		<div class="container col-xs-12 quiz-container col-md-8">
 			<h2>${quizViewDto.question.title}</h2>
 			<hr>
 			<p class="text-muted">${quizViewDto.question.createDate} by ${quizViewDto.asker.username}</p>
@@ -94,16 +100,38 @@
 					<c:otherwise>
 						<%--<a href="<%=request.getContextPath()%>/user/login" class="btn btn-default" >请登录回答</a>--%>
 						<a href="#" data-toggle="modal" data-target="#loginModal" class="btn btn-default">请登录回答</a>
+
 					</c:otherwise>
 				</c:choose>
 			</c:if>
 
-		<hr>
-		<c:if test="${quizViewDto.choicedAnswer!=null}">
-			<legend>最佳回答</legend>
-			<p>${quizViewDto.choicedAnswer.answer.createDate} by ${quizViewDto.choicedAnswer.user.username}</p>
-			${quizViewDto.choicedAnswer.answer.content}
-		</c:if>
+			<hr>
+			<c:if test="${quizViewDto.choicedAnswer!=null}">
+				<legend>最佳回答</legend>
+				<p>${quizViewDto.choicedAnswer.answer.createDate} by ${quizViewDto.choicedAnswer.user.username}</p>
+				${quizViewDto.choicedAnswer.answer.content}
+			</c:if>
+		</div>
+		<div class="container hidden-sm col-xs-4">
+			<legend>最新留言</legend>
+			<c:forEach items="${comments}" var="comment">
+				<img class="commentorIcon" src="/image/down/u/${comment.userId}"/>
+				<p>${comment.content}</p>
+				<hr/>
+			</c:forEach>
+			<p>说点什么?</p>
+			<form method="post" action="<%=request.getContextPath()%>/comment/add">
+				<input class="form-control" type="text" required maxlength="64" name="content"/>
+				<input type="hidden" name="quizId" value="${quizViewDto.question.id}">
+				<input type="hidden" name="userId" value="${currentUser.id}" >
+				<c:if test="${currentUser!=null}">
+					<button type="submit" class="btn btn-block btn-primary">留言</button>
+				</c:if>
+				<c:if test="${currentUser==null}">
+					<button class="btn btn-block btn-primary" disabled>请先登录</button>
+				</c:if>
+			</form>
+			<hr>
 		</div>
 		<br>
 		<hr>

@@ -105,4 +105,10 @@
       del_flag = #{delFlag,jdbcType=CHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectByQuizId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select *
+    from t_comment t
+    where t.question_id = #{quidId,jdbcType=INTEGER} ORDER BY t.create_date desc  limit 5
+  </select>
 </mapper>

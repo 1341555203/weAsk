@@ -3,6 +3,8 @@ package cn.qtech.mtf.modules.dao;
 import cn.qtech.mtf.common.persistence.annotation.MyBatisDao;
 import cn.qtech.mtf.modules.entity.Comment;
 
+import java.util.List;
+
 @MyBatisDao
 public interface CommentMapper {
     int deleteByPrimaryKey(Integer id);
@@ -16,4 +18,6 @@ public interface CommentMapper {
     int updateByPrimaryKeySelective(Comment record);
 
     int updateByPrimaryKey(Comment record);
+
+    List<Comment> selectByQuizId(Integer quizId);
 }

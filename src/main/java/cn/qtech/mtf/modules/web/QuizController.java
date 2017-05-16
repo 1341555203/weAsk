@@ -1,11 +1,9 @@
 package cn.qtech.mtf.modules.web;
 
 import cn.qtech.mtf.modules.dto.QuizViewDto;
-import cn.qtech.mtf.modules.entity.Answer;
-import cn.qtech.mtf.modules.entity.Choice;
-import cn.qtech.mtf.modules.entity.Question;
-import cn.qtech.mtf.modules.entity.User;
+import cn.qtech.mtf.modules.entity.*;
 import cn.qtech.mtf.modules.sevice.AnswerService;
+import cn.qtech.mtf.modules.sevice.CommentService;
 import cn.qtech.mtf.modules.sevice.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +13,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import sun.plugin.com.event.COMEventHandler;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -31,6 +30,8 @@ public class QuizController {
 	private AnswerService answerService;
 	@Autowired
 	private QuizService quizService;
+	@Autowired
+	private CommentService commentService;
 
 	@RequestMapping(value = "/startup", method = RequestMethod.GET)
 	public String startupPage() {
@@ -56,8 +57,9 @@ public class QuizController {
 
 		QuizViewDto quizViewDto = quizService.getQuizViewDtosByQuestionId(quizId);
 		model.addAttribute(quizViewDto);
-		System.out.println(quizViewDto);
 
+		List<Comment> comments = commentService.getCommentsByQuizId(id);
+		model.addAttribute("comments",comments);
 		return "quiz/view";
 	}
 
@@ -96,13 +98,14 @@ public class QuizController {
 	@RequestMapping(value = "/search/{type}/{keyWord}", method = RequestMethod.GET)
 	public String search(@PathVariable String type, @PathVariable String keyWord, Model model) {
 		List<Question> questions = null;
-		if (!(keyWord == null) && !(keyWord.equals("")))
+		if (!(keyWord == null) && !(keyWord.equals(""))) {
 			if (type.equals("title")) {
 				questions = quizService.getQuestionsByTitleKeyWord(keyWord);
 			} else if (type.equals("content")) {
 				questions = quizService.getQuestionsByContentKeyWord(keyWord);
 			}
-		model.addAttribute("questions", questions);
+			model.addAttribute("questions", questions);
+		}
 		return "quiz/search";
 	}
 }
