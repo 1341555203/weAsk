@@ -1,0 +1,13 @@
+.msgIcon{
+    width: 20px;
+    height: 20px;
+    border: 2px solid whitesmoke;
+}
+#msg-box{
+    box-shadow: 4px 4px 5px 4px #888888;
+    padding: 20px 20px 20px 20px;
+}
+#msg-container{
+    max-height: 400px;
+    overflow-y:scroll;
+}
