@@ -47,4 +47,9 @@ public class SysController {
 		return "msg";
 	}
 
+@RequestMapping(value = "/banner", method = RequestMethod.GET)
+	public String getBanner() {
+
+	return "sys/banner";
+	}
 }

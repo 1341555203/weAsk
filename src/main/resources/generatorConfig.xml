@@ -35,7 +35,7 @@
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
         <!--Mapper映射文件生成所在的目录 为每一个数据库的表生成对应的SqlMap文件 -->
-        <sqlMapGenerator targetPackage="message" targetProject="src/main/resources/mappings/modules">
+        <sqlMapGenerator targetPackage="banner" targetProject="src/main/resources/mappings/modules">
             <!-- 是否在当前路径下新加一层schema,eg：fase路径cn.qtech.mtf.dao， true:cn.qtech.mtf.dao.[schemaName] -->
             <property name="enableSubPackages" value="false"/>
         </sqlMapGenerator>
@@ -43,9 +43,9 @@
             <!-- 是否在当前路径下新加一层schema,eg：fase路径cn.qtech.mtf.dao， true:com.m2plat.his.dao.[schemaName] -->
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
-        <table tableName="t_message" schema="message" enableCountByExample="false"
+        <table tableName="t_banner" schema="message" enableCountByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
-               enableUpdateByExample="false" domainObjectName="Message">
+               enableUpdateByExample="false" domainObjectName="Banner">
         </table>
     </context>
 </generatorConfiguration>
