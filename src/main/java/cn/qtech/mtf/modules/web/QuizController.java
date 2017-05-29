@@ -17,6 +17,7 @@ import sun.plugin.com.event.COMEventHandler;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -87,6 +88,7 @@ public class QuizController {
 		return "quiz/myquiz";
 	}
 
+
 	@RequestMapping(value = "/answer", method = RequestMethod.GET)
 	public String myAnswer(HttpSession httpSession, Model model) {
 		User currentUser = (User) httpSession.getAttribute("currentUser");
@@ -95,17 +97,30 @@ public class QuizController {
 		return "quiz/myanswer";
 	}
 
+
 	@RequestMapping(value = "/search/{type}/{keyWord}", method = RequestMethod.GET)
 	public String search(@PathVariable String type, @PathVariable String keyWord, Model model) {
-		List<Question> questions = null;
+		List<Question> questions = new ArrayList<Question>();
 		if (!(keyWord == null) && !(keyWord.equals(""))) {
 			if (type.equals("title")) {
 				questions = quizService.getQuestionsByTitleKeyWord(keyWord);
 			} else if (type.equals("content")) {
 				questions = quizService.getQuestionsByContentKeyWord(keyWord);
 			}
-			model.addAttribute("questions", questions);
 		}
+			model.addAttribute("questions", questions);
 		return "quiz/search";
 	}
+
+	/**
+	 * delete by id
+	 */
+	@RequestMapping(value = "/del/{quizId}", method = RequestMethod.GET)
+	public String search(@PathVariable Integer quizId, Model model) {
+		if(quizId!=null){
+			quizService.delQuiz(quizId);
+		}
+		return "redirect:quiz/myQuiz";
+	}
+
 }

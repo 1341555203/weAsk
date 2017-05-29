@@ -73,7 +73,7 @@
 		<div class="col-xs-10 col-xs-offset-1">
 			<c:forEach items="${myAnsweredQuestions}" var="question">
 				<h3>${question.title}</h3>
-				<a href="<%=request.getContextPath()%>/quiz/view/${question.id}" class="btn btn-primary">查看</a>
+				<a href="<%=request.getContextPath()%>/quiz/view/${question.id}" class="btn btn-primary btn-sm">查看</a>
 				<hr>
 			</c:forEach>
 		</div>

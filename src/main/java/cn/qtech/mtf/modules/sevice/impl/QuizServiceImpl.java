@@ -44,7 +44,7 @@ public class QuizServiceImpl implements QuizService {
 
 	@Override
 	public void delQuiz(Integer id) {
-
+		questionMapper.deleteByPrimaryKey(id);
 	}
 
 	@Override

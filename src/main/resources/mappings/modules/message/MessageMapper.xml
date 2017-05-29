@@ -7,11 +7,12 @@
       <arg column="from_user_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="to_user_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="content" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="is_read" javaType="java.lang.String" jdbcType="CHAR" />
       <arg column="create_date" javaType="java.util.Date" jdbcType="TIMESTAMP" />
     </constructor>
   </resultMap>
   <sql id="Base_Column_List">
-    id, from_user_id, to_user_id, content, create_date
+    id, from_user_id, to_user_id, content, is_read, create_date
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -25,9 +26,11 @@
   </delete>
   <insert id="insert" parameterType="cn.qtech.mtf.modules.entity.Message">
     insert into t_message (id, from_user_id, to_user_id, 
-      content, create_date)
+      content, is_read, create_date
+      )
     values (#{id,jdbcType=INTEGER}, #{fromUserId,jdbcType=INTEGER}, #{toUserId,jdbcType=INTEGER}, 
-      #{content,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP})
+      #{content,jdbcType=VARCHAR}, #{isRead,jdbcType=CHAR}, #{createDate,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="cn.qtech.mtf.modules.entity.Message">
     insert into t_message
@@ -43,6 +46,9 @@
       </if>
       <if test="content != null">
         content,
+      </if>
+      <if test="isRead != null">
+        is_read,
       </if>
       <if test="createDate != null">
         create_date,
@@ -61,6 +67,9 @@
       <if test="content != null">
         #{content,jdbcType=VARCHAR},
       </if>
+      <if test="isRead != null">
+        #{isRead,jdbcType=CHAR},
+      </if>
       <if test="createDate != null">
         #{createDate,jdbcType=TIMESTAMP},
       </if>
@@ -78,6 +87,9 @@
       <if test="content != null">
         content = #{content,jdbcType=VARCHAR},
       </if>
+      <if test="isRead != null">
+        is_read = #{isRead,jdbcType=CHAR},
+      </if>
       <if test="createDate != null">
         create_date = #{createDate,jdbcType=TIMESTAMP},
       </if>
@@ -89,7 +101,23 @@
     set from_user_id = #{fromUserId,jdbcType=INTEGER},
       to_user_id = #{toUserId,jdbcType=INTEGER},
       content = #{content,jdbcType=VARCHAR},
+      is_read = #{isRead,jdbcType=CHAR},
       create_date = #{createDate,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="unreadMessageList" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+      SELECT * from t_message m
+      WHERE m.to_user_id = #{userId,jdbcType=INTEGER}
+      and m.is_read = '0'
+      ORDER BY create_date DESC
+
+  </select>
+    <select id="talkMessage" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT * from t_message m
+         WHERE m.to_user_id = #{1,jdbcType=INTEGER} AND m.from_user_id = #{0,jdbcType=INTEGER}
+--          and m.is_read = '0'
+        ORDER BY create_date DESC
+
+    </select>
 </mapper>

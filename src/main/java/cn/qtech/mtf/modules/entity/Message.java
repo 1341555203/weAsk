@@ -2,7 +2,7 @@ package cn.qtech.mtf.modules.entity;
 
 import java.util.Date;
 
-public class Message {
+public class Message implements Comparable<Message>{
     private Integer id;
 
     private Integer fromUserId;
@@ -11,13 +11,16 @@ public class Message {
 
     private String content;
 
+    private String isRead;
+
     private Date createDate;
 
-    public Message(Integer id, Integer fromUserId, Integer toUserId, String content, Date createDate) {
+    public Message(Integer id, Integer fromUserId, Integer toUserId, String content, String isRead, Date createDate) {
         this.id = id;
         this.fromUserId = fromUserId;
         this.toUserId = toUserId;
         this.content = content;
+        this.isRead = isRead;
         this.createDate = createDate;
     }
 
@@ -57,11 +60,24 @@ public class Message {
         this.content = content == null ? null : content.trim();
     }
 
+    public String getIsRead() {
+        return isRead;
+    }
+
+    public void setIsRead(String isRead) {
+        this.isRead = isRead == null ? null : isRead.trim();
+    }
+
     public Date getCreateDate() {
         return createDate;
     }
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
+    }
+
+    @Override
+    public int compareTo(Message o) {
+        return this.getCreateDate().compareTo(o.getCreateDate());
     }
 }

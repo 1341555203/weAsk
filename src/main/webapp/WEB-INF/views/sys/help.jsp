@@ -8,7 +8,7 @@
 	<%--以上标签必须放在最上 否则无法在移动端正常显示--%>
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/static/bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/static/wangEditor/css/wangEditor.min.css">
-	<title>发起提问</title>
+	<title>帮助</title>
 </head>
 <body>
 <div class="container col-lg-8 col-lg-offset-2 ">
@@ -22,7 +22,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="<%=request.getContextPath()%>/sys/home">weAsk</a>
+				<a class="navbar-brand" href="<%=request.getContextPath()%>/sys/home">WeAsk</a>
 			</div>
 
 			<div class="navbar-collapse collapse" id="bs-example-navbar-collapse-2" aria-expanded="false"
@@ -65,22 +65,7 @@
 		</div>
 	</nav>
 	<div class="container col-xs-12">
-		<form method="post" action="<%=request.getContextPath()%>/quiz/startup">
-			<input type="hidden" name="userId" value="${currentUser.id}"/>
-			<div class="form-group">
-				<label class="control-label" for="inputDefault">主题</label>
-				<input type="text" class="form-control" id="inputDefault" name="title">
-			</div>
-			<div class="form-group">
-				<label class="control-label" for="inputQuiz">问题描述</label>
-				<textarea id="inputQuiz" style="height: 400px;" name="content">
-                <p>请输入内容...</p>
-			</textarea>
-			</div>
-			<div class="form-group">
-				<button type="submit" class="btn btn-primary">提交</button>
-			</div>
-		</form>
+		<h2>暂时没有</h2>
 	</div>
 </div>
 
@@ -88,36 +73,4 @@
 </body>
 <script src="<%=request.getContextPath()%>/static/jquery/1.11.3/jquery.min.js"></script>
 <script src="<%=request.getContextPath()%>/static/bootstrap/js/bootstrap.min.js"></script>
-<script src="<%=request.getContextPath()%>/static/wangEditor/js/wangEditor.min.js"></script>
-<script>
-	var editor = new wangEditor('inputQuiz');
-	editor.config.menus = [
-		'source',
-		'|',
-		'bold',
-		'underline',
-		'italic',
-		'strikethrough',
-		'eraser',
-		'forecolor',
-		'|',
-		'quote',
-		'fontfamily',
-		'fontsize',
-		'unorderlist',
-		'orderlist',
-		'|',
-		'link',
-		'unlink',
-		'table',
-		'|',
-		'img',
-		'location',
-		'insertcode',
-		'|',
-		'undo',
-		'redo',
-	];
-	editor.create();
-</script>
 </html>

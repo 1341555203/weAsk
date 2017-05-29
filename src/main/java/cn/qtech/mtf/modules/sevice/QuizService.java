@@ -29,4 +29,5 @@ public interface QuizService {
 	QuizViewDto getQuizViewDtosByQuestionId(Integer questionId);
 
 	void chooseAnswer(Choice choice);
+
 }

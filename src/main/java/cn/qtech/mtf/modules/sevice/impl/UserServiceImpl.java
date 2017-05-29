@@ -55,4 +55,9 @@ class UserServiceImpl implements UserService {
 		userMapper.deleteByPrimaryKey(id);
 	}
 
+	@Override
+	public User selectById(Integer id) {
+		return userMapper.selectByPrimaryKey(id);
+	}
+
 }

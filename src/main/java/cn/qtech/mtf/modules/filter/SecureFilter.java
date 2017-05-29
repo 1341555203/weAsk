@@ -29,7 +29,10 @@ public class SecureFilter implements Filter {
 
 		System.out.println(servletPath);
 
-		if(servletPath.startsWith("/login")||servletPath.startsWith("/signUp")||servletPath.startsWith("/success")||servletPath.startsWith("loginAjax")){
+		if(servletPath.startsWith("/login")
+				||servletPath.startsWith("/signUp")
+				||servletPath.startsWith("/success")
+				||servletPath.startsWith("loginAjax")){
 			filterChain.doFilter(servletRequest,servletResponse);
 		}
 		else {

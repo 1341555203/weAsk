@@ -1,63 +1,80 @@
 package cn.qtech.mtf.modules.web;
 
+import cn.qtech.mtf.modules.dto.MessageList;
 import cn.qtech.mtf.modules.entity.Message;
-import org.springframework.stereotype.Controller;
+import cn.qtech.mtf.modules.entity.User;
+import cn.qtech.mtf.modules.sevice.MessageService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
  * Created by mtf81 on 2017/5/21.
  */
-@Controller
+@RestController
 @RequestMapping("/msg")
 public class MessageController {
 
-	@RequestMapping(value = "/{toId}",method = RequestMethod.GET)
-	public String getMsg(@PathVariable int toId, Model model){
+	@Autowired
+	private MessageService messageService;
+
+	//发送给{toId}的消息
+	@RequestMapping(value = "/talk/{toId}", method = RequestMethod.GET)
+	public List<Message> postedMsg(@PathVariable int toId, Model model,HttpSession session) {
+		User currentUser = (User) session.getAttribute("currentUser");
+		List<Message> messages =messageService.getTalkMessage(currentUser.getId(),toId);
+//		model.addAttribute("messages", messages);
+		return messages;
+	}
+
+	//接收的消息
+	@RequestMapping(value = "/receive", method = RequestMethod.GET)
+	public List<Message> receiveMsg(HttpSession session, Model model) {
 		List<Message> messages = new ArrayList<Message>();
-		Message msg = new Message();
-		msg.setId(1);
-		msg.setContent("hello");
-		msg.setCreateDate(new Date());
-		msg.setToUserId(1);
-		msg.setFromUserId(2);
-
-		Message msg2 = new Message();
-		msg2.setId(2);
-		msg2.setContent("hi my guy");
-		msg2.setCreateDate(new Date());
-		msg2.setToUserId(2);
-		msg2.setFromUserId(1);
-
-		Message msg3 = new Message();
-		msg3.setId(3);
-		msg3.setContent("hi 1233y");
-		msg3.setCreateDate(new Date());
-		msg3.setToUserId(1);
-		msg3.setFromUserId(2);
-
-		messages.add(msg);
-		messages.add(msg2);
-		messages.add(msg3);
-		model.addAttribute("messages",messages);
-		return "msg";
+		User currentUser = (User) session.getAttribute("currentUser");
+		if (currentUser != null) {
+			 messages = messageService.getUnreadMessage(currentUser.getId());
+		}
+//		model.addAttribute("messages", messages);
+		return messages;
 	}
 
 	//get message count
+	@RequestMapping(value = "/count", method = RequestMethod.GET)
+	public Integer getMsgCount(HttpSession session) {
+		User currentUser = (User) session.getAttribute("currentUser");
+		int count = 0;
+		if (currentUser != null) {
+			List<Message> tmp = messageService.getUnreadMessage(currentUser.getId());
+			count = tmp == null ? 0 : tmp.size();
+		}
+		return count;
+	}
+
+	@RequestMapping(value = "/setRead",method = RequestMethod.GET)
+	public String setRead( Integer toId,HttpSession session){
+		User currentUser = (User)session.getAttribute("currentUser");
+		messageService.setMessageRead(toId,currentUser.getId());
+		return "success";
+	}
 
 	// post message
-
+	@RequestMapping(value = "/send",method = RequestMethod.POST)
+	public String sendMsg(@RequestBody Message message){
+		if(message!=null) {
+			messageService.saveMessage(message);
+		}
+		return "success";
+	}
 	/*
 	消息轮询
 	消息发送
 	消息动态展示/刷新消息页面
-
+	设为已读
 	 */
 
 }

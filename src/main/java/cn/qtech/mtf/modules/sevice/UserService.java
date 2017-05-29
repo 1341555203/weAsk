@@ -18,4 +18,5 @@ public interface UserService {
 	User selectByEmail(String email);
 	List<User> findAllUser();
 	void delUser(Integer id);
+	User selectById(Integer id);
 }
