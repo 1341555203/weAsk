@@ -115,7 +115,9 @@
 		<div class="container hidden-sm col-xs-4">
 			<legend>最新留言</legend>
 			<c:forEach items="${comments}" var="comment">
-				<img class="commentorIcon" src="/image/down/u/${comment.userId}"/>
+				<a href="#" onclick="window.open('<%=request.getContextPath()%>/sys/msg/${comment.userId}')">
+					<img class="commentorIcon" src="/image/down/u/${comment.userId}"/>
+				</a>
 				<p>${comment.content}</p>
 				<hr/>
 			</c:forEach>

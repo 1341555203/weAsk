@@ -64,8 +64,10 @@ public class MessageController {
 
 	// post message
 	@RequestMapping(value = "/send",method = RequestMethod.POST)
-	public String sendMsg(@RequestBody Message message){
-		if(message!=null) {
+	public String sendMsg(@RequestBody Message message,HttpSession session){
+		User currentUser  = (User) session.getAttribute("currentUser");
+		if(message!=null&&currentUser!=null) {
+			message.setFromUserId(currentUser.getId());
 			messageService.saveMessage(message);
 		}
 		return "success";

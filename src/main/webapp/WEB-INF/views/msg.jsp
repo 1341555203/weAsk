@@ -108,7 +108,11 @@
 		};
 //		console.log("get talk");
 		getTalk(toId);
+		function intervalGetTalk(){
+			getTalk(toId);
 
+		}
+		setInterval(intervalGetTalk,5*1000)
 		function postList(){
 			console.log("post talks");
 			$.ajax({
@@ -132,16 +136,14 @@
 			var msgStr = msg.val();
 			msg.val("");
 			if(msgStr!=null){
-				var data={
-						message:{
+				var message={
 							toUserId:toId,
 							content:msgStr
-						}
-				};
+						};
 				$.ajax({
 					url: '<%=request.getContextPath()%>/msg/send',
 					type: 'POST',
-					data:JSON.stringify(data),
+					data:JSON.stringify(message),
 					contentType: "application/json; charset=utf-8",
 					success: function (data) {
 						console.log(data);

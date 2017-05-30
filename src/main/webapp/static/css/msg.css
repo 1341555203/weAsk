@@ -8,6 +8,6 @@
     padding: 20px 20px 20px 20px;
 }
 #msg-container{
-    max-height: 100%;
+    max-height: 500px;
     overflow-y:scroll;
 }
